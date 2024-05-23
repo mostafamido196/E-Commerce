@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "368023686393",
+    "firebase_url": "https://ecommerceapp-1b013-default-rtdb.firebaseio.com",
+    "project_id": "ecommerceapp-1b013",
+    "storage_bucket": "ecommerceapp-1b013.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368023686393:android:c90c7c82cd179a22346628",
+        "android_client_info": {
+          "package_name": "com.samy.ecommerceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbsfODSiu7QYnwXYyPKuudCCIctCrERFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368023686393:android:db2a402cc6386c00346628",
+        "android_client_info": {
+          "package_name": "com.samy.groceryapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbsfODSiu7QYnwXYyPKuudCCIctCrERFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
