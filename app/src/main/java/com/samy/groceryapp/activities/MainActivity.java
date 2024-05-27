@@ -1,4 +1,4 @@
-package com.samy.groceryapp;
+package com.samy.groceryapp.activities;
 
 import android.os.Bundle;
 import android.view.View;
@@ -19,10 +19,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.samy.groceryapp.R;
 import com.samy.groceryapp.databinding.ActivityMainBinding;
 import com.samy.groceryapp.model.UserModel;
-
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

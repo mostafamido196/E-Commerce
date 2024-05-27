@@ -1,5 +1,6 @@
 package com.samy.groceryapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Glide.with(context).load(recommendedList.get(position).getImg_url()).into(holder.imageView);
         holder.name.setText(recommendedList.get(position).getName());
         holder.rating.setText(recommendedList.get(position).getRating());

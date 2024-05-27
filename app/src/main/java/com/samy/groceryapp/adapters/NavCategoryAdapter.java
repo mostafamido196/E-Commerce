@@ -1,6 +1,7 @@
 package com.samy.groceryapp.adapters;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.nav_cat_item, parent, false));
     }
 
+    @SuppressLint("RecyclerView")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.name.setText(list.get(position).getName());

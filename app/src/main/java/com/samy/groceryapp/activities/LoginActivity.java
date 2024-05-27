@@ -1,80 +1,101 @@
 package com.samy.groceryapp.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.samy.groceryapp.MainActivity;
 import com.samy.groceryapp.R;
+import com.samy.groceryapp.databinding.ActivityLoginBinding;
+import com.samy.groceryapp.viewmodel.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText email, password;
-    Button login_btn;
-    TextView reg_tv;
     FirebaseAuth auth;
-    private ProgressBar progressBar;
+    private LoginViewModel loginViewModel;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setup();
 
     }
 
 
     private void setup() {
-
         auth = FirebaseAuth.getInstance();
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        downloadImg();
+        observe();
+        onClick();
+    }
 
-        ImageView imageView = findViewById(R.id.reg_img);
-        Glide.with(this).load(R.mipmap.loginbg).into(imageView);
-        progressBar = findViewById(R.id.progressbar);
-        progressBar.setVisibility(View.GONE);
+    private void downloadImg() {
+        Glide.with(this).load(R.mipmap.loginbg).into(binding.regImg);
+        binding.progressbar.setVisibility(View.GONE);
 
-        email = findViewById(R.id.email_login);
-        password = findViewById(R.id.password_login);
-        login_btn = findViewById(R.id.login_btn_login);
-        reg_tv = findViewById(R.id.sign_up_login);
+    }
 
-        login_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                login();
-            }
+    private void onClick() {
+        binding.loginBtnLogin.setOnClickListener(view -> {
+            binding.progressbar.setVisibility(View.VISIBLE);
+            login();
         });
 
-        reg_tv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
-                finish();
+        binding.signUpLogin.setOnClickListener(view -> {
+            startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
+            finish();
+        });
+    }
+
+    private void observe() {
+        loginViewModel.getLoginLivedata().observe(this, response -> {
+            switch (response.status) {
+                case LOADING:
+                    // Show loading indicator
+                    Log.d("mos samy", "LOADING ");
+                    break;
+                case SUCCESS:
+                    // Update UI with response.data
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                    Log.d("mos samy", "SUCCESS: " + ((AuthResult) response.data));
+                    break;
+                case ERROR:
+                    // Show error message
+                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                    Log.d("mos samy", "error: " + response.error);
+                    break;
+                case IDEL:
+                    // Handle idle state if needed
+                    Log.d("mos samy", "IDEL");
+                    break;
             }
         });
     }
 
     private void login() {
-        String userEmail = email.getText().toString();
-        String userPassword = password.getText().toString();
+        String userEmail = binding.emailLogin.getText().toString();
+        String userPassword = binding.passwordLogin.getText().toString();
+        verifyEmailPassword(userEmail,userPassword);
+        loginViewModel.login(binding.emailLogin.getText().toString(), binding.passwordLogin.getText().toString());
 
+    }
+
+    private void verifyEmailPassword(String userEmail, String userPassword) {
         if (TextUtils.isEmpty(userEmail)) {
             Toast.makeText(this, "Email is Empty", Toast.LENGTH_SHORT).show();
             return;
@@ -87,21 +108,22 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Password Length must be greater then 6 letter", Toast.LENGTH_SHORT).show();
             return;
         }
-        auth.signInWithEmailAndPassword(userEmail, userPassword)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
+    }
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Error: " + task.getException(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("emailState", binding.emailLogin.getText().toString());
+        outState.putString("passState", binding.passwordLogin.getText().toString());
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String email = savedInstanceState.getString("emailState");
+        String pass = savedInstanceState.getString("passState");
+        binding.emailLogin.setText(email);
+        binding.passwordLogin.setText(pass);
     }
 
 }

@@ -1,6 +1,11 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+
+    //kapt for binding
+//    id 'kotlin-android'
+//    id 'kotlin-kapt'
+
 }
 
 android {
@@ -27,10 +32,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
+        dataBinding true
         viewBinding true
     }
+    dataBinding {
+        enabled = true
+    }
 }
+
 
 dependencies {
 
@@ -64,5 +75,9 @@ dependencies {
 
     //circle imageview
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    // rxjava
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+
 
 }
