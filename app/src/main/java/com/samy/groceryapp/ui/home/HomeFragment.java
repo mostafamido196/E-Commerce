@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.samy.groceryapp.model.HomeCategory;
 import com.samy.groceryapp.model.PopularModel;
 import com.samy.groceryapp.model.RecommendedModel;
 import com.samy.groceryapp.model.ViewAllModel;
+import com.samy.groceryapp.viewmodel.main.SearchViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +60,16 @@ public class HomeFragment extends Fragment {
     List<RecommendedModel> recommendedList;
     RecommendedAdapter recommendedAdapter;
 
+    //
+    private SearchViewModel searchViewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+        binding.setViewModel(searchViewModel);
+        binding.setLifecycleOwner(this);
         View root = binding.getRoot();
 
         setup();
@@ -72,72 +80,64 @@ public class HomeFragment extends Fragment {
         //initial fragment state
         showProgress(true);
         db = FirebaseFirestore.getInstance();
-        search();
         getData();
         viewAll();
 
+
+        observe();
     }
 
-    private void search() {
-        binding.searchRec.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+    private void observe() {
         searchList = new ArrayList<>();
         searchAdapter = new ViewAllAdapter(getActivity(), searchList);
         binding.searchRec.setAdapter(searchAdapter);
         binding.searchRec.setHasFixedSize(true);
-        binding.searchBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().isEmpty()) {
-                    showPage(true);
+        searchViewModel.getSearchListLivedata().observe(this, response -> {
+            switch (response.status) {
+                case LOADING:
+                    // Show loading indicator
+                    Log.d("mos samy", "LOADING ");
+                    break;
+                case SUCCESS:
+                    // Update UI with response.data
+                    Log.d("mos samy", "SUCCESS: " + ((List<ViewAllModel>) response.data));
                     searchList.clear();
                     searchAdapter.notifyDataSetChanged();
-                } else {
-                    showPage(false);
-                    searchProduct(editable.toString());
-                }
+                    for (ViewAllModel model : (List<ViewAllModel>) response.data) {
+                        searchList.add(model);
+                        searchAdapter.notifyDataSetChanged();
+                    }
+                    break;
+                case ERROR:
+                    // Show error message
+                    Toast.makeText(getActivity(), "error: " + response.error, Toast.LENGTH_LONG).show();
+                    Log.d("mos samy", "ERROR: " + response.error);
+                    break;
+                case IDEL:
+                    // Handle idle state if needed
+                    Log.d("mos samy", "IDEL");
+                    break;
             }
+        });
+        searchViewModel.getSearchKeyET().observe(this, s -> {
+            searchList.clear();
+            searchAdapter.notifyDataSetChanged();
+            solveIssues();
+            searchViewModel.search(s);
         });
     }
 
-    private void showPage(boolean b) {
-        if (b){
-            binding.searchRec.setVisibility(View.GONE);
-            binding.page.setVisibility(View.VISIBLE);
-        }else {
-            binding.searchRec.setVisibility(View.VISIBLE);
-            binding.page.setVisibility(View.GONE);
-        }
+    private void solveIssues() {
+        // when long press on delete on edittext
+        binding.searchBox.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (binding.searchBox.getText().toString().isEmpty())
+                    searchViewModel.onDeleteKeyPressed();
+            }
+            return false;
+        });
     }
 
-    private void searchProduct(String type) {
-        if (!type.isEmpty()) {
-            db.collection("AllProducts").whereEqualTo("type", type).get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                searchList.clear();
-                                searchAdapter.notifyDataSetChanged();
-                                for (DocumentSnapshot doc : task.getResult().getDocuments()) {
-                                    ViewAllModel model = doc.toObject(ViewAllModel.class);
-                                    searchList.add(model);
-                                    searchAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
-                    });
-        }
-    }
 
     private void viewAll() {
         View.OnClickListener goToViewAll = new View.OnClickListener() {

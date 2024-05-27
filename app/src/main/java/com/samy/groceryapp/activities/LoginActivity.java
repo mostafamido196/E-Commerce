@@ -65,23 +65,19 @@ public class LoginActivity extends AppCompatActivity {
             switch (response.status) {
                 case LOADING:
                     // Show loading indicator
-                    Log.d("mos samy", "LOADING ");
                     break;
                 case SUCCESS:
                     // Update UI with response.data
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
-                    Log.d("mos samy", "SUCCESS: " + ((AuthResult) response.data));
                     break;
                 case ERROR:
                     // Show error message
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
-                    Log.d("mos samy", "error: " + response.error);
                     break;
                 case IDEL:
                     // Handle idle state if needed
-                    Log.d("mos samy", "IDEL");
                     break;
             }
         });

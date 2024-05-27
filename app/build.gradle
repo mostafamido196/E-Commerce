@@ -3,8 +3,8 @@ plugins {
     id 'com.google.gms.google-services'
 
     //kapt for binding
-//    id 'kotlin-android'
-//    id 'kotlin-kapt'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
 
 }
 

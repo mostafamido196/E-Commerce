@@ -53,7 +53,6 @@ public class NavCategoryAdapter extends RecyclerView.Adapter<NavCategoryAdapter.
             public void onClick(View view) {
                 Intent intent = new Intent(context, NavCatigoryActivity.class);
                 intent.putExtra("type",list.get(position).getType());
-                Log.d("mos samy","popularAdapter: type:"+list.get(position).getType());
                 context.startActivity(intent);
             }
         });

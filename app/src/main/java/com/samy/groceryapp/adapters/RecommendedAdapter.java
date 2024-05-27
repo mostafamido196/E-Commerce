@@ -46,7 +46,6 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
             public void onClick(View view) {
                 Intent intent = new Intent(context, ViewAllActivity.class);
                 intent.putExtra("type",recommendedList.get(position).getType());
-                Log.d("mos samy","popularAdapter:name: "+recommendedList.get(position).getName()+" type:"+recommendedList.get(position).getType());
                 context.startActivity(intent);
             }
         });

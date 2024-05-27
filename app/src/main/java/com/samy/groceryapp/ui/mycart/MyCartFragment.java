@@ -95,7 +95,6 @@ public class MyCartFragment extends Fragment {
                             MyCartModel myCartModel = decument.toObject(MyCartModel.class);
                             myCartModel.setDocumentId(documentId);
                             list.add(myCartModel);
-                            Log.d("mos samy", "name: " + myCartModel.getProductName());
                             adapter.notifyDataSetChanged();
                             binding.progressbar.setVisibility(View.GONE);
                             binding.recyclerview.setVisibility(View.VISIBLE);
@@ -112,7 +111,6 @@ public class MyCartFragment extends Fragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int totalBill = intent.getIntExtra("totalAmount", 0);
-                Log.d("mos samy","MyCartFragment totalbill: "+totalBill);
                 binding.txtPrice.setText("Total Bill :" + totalBill + "$");
             }
         };

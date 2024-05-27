@@ -49,7 +49,6 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
             public void onClick(View view) {
                 Intent intent = new Intent(context, ViewAllActivity.class);
                 intent.putExtra("type",list.get(position).getType());
-                Log.d("mos samy","popularAdapter:name: "+list.get(position).getName()+" type:"+list.get(position).getType());
                 context.startActivity(intent);
             }
         });

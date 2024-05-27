@@ -45,7 +45,6 @@ public class ViewAllActivity extends AppCompatActivity {
         actionBar();
 
         String type = getIntent().getStringExtra("type");
-        Log.d("mos samy", "ViewAllActivity: type:" + type);
 
         db = FirebaseFirestore.getInstance();
         binding.viewAllRec.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -67,7 +66,6 @@ public class ViewAllActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for (QueryDocumentSnapshot decument : task.getResult()) {
                     ViewAllModel itemModel = decument.toObject(ViewAllModel.class);
-                    Log.d("mos samy", "ViewAllActivity: name" + itemModel.getName() + "," + itemModel.getType());
                     viewAllModelList.add(itemModel);
                     viewAllAdapter.notifyDataSetChanged();
                     binding.progressbar.setVisibility(View.GONE);
@@ -104,7 +102,6 @@ public class ViewAllActivity extends AppCompatActivity {
                     binding.progressbar.setVisibility(View.GONE);
                     for (QueryDocumentSnapshot decument : task.getResult()) {
                         ViewAllModel itemModel = decument.toObject(ViewAllModel.class);
-                        Log.d("mos samy", "ViewAllActivity: name" + itemModel.getName() + "," + itemModel.getType());
                         viewAllModelList.add(itemModel);
                         viewAllAdapter.notifyDataSetChanged();
 

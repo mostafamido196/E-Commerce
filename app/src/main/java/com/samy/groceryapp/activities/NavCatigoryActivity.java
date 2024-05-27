@@ -89,7 +89,6 @@ public class NavCatigoryActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     for (QueryDocumentSnapshot decument : task.getResult()) {
                         NavCatDetailModel itemModel = decument.toObject(NavCatDetailModel.class);
-                        Log.d("mos samy", "getProduct: name" + itemModel.getName() + "," + itemModel.getType());
                         list.add(itemModel);
                         adapter.notifyDataSetChanged();
 

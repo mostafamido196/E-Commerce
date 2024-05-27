@@ -46,7 +46,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
 
-
     private void observe() {
         registerViewModel.getRegisterLivedata().observe(this, response -> {
             switch (response.status) {
@@ -84,10 +83,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
-
 
 
 }

@@ -47,7 +47,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             public void onClick(View view) {
                 Intent intent = new Intent(context, ViewAllActivity.class);
                 intent.putExtra("type",categoryList.get(position).getType());
-                Log.d("mos samy","popularAdapter: type:"+categoryList.get(position).getType());
                 context.startActivity(intent);
             }
         });

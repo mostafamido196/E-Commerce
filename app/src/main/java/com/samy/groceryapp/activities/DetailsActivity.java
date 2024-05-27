@@ -160,7 +160,6 @@ public class DetailsActivity extends AppCompatActivity {
         RequestListener<Drawable> requestListener = new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                Log.d("mos samy", "name: " + viewAllModel.getName() + "\n GlideException: " + e.getMessage());
                 return false;
             }
 

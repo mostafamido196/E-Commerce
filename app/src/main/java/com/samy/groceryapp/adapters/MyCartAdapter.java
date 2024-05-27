@@ -66,11 +66,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Log.d("mos samy", "adapter before totalbill: " + totalPrice);
-                                    Log.d("mos samy", "adapter before itemPrice: " + list.get(position).getTotalPrice());
                                     totalPrice = totalPrice - list.get(position).getTotalPrice();
                                     update = false;
-                                    Log.d("mos samy", "adapter after totalbill: " + totalPrice);
                                     list.remove(list.get(position));
                                     notifyDataSetChanged();
                                     Toast.makeText(context, "Item Deleted", Toast.LENGTH_SHORT).show();

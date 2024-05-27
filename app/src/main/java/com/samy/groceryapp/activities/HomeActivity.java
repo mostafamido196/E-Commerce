@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,12 +33,12 @@ public class HomeActivity extends AppCompatActivity {
         binding.progressbar.setVisibility(View.GONE);
 
         auth = FirebaseAuth.getInstance();
-//        if (auth.getCurrentUser() != null) {  todo delete comment
-//            binding.progressbar.setVisibility(View.VISIBLE);
-//            startActivity(new Intent(HomeActivity.this, MainActivity.class));
-//            Toast.makeText(this, "please wait you are already logged in.", Toast.LENGTH_SHORT).show();
-//            finish();
-//        }
+        if (auth.getCurrentUser() != null) {
+            binding.progressbar.setVisibility(View.VISIBLE);
+            startActivity(new Intent(HomeActivity.this, MainActivity.class));
+            Toast.makeText(this, "please wait you are already logged in.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
         binding.loginSs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
